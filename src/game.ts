@@ -47,18 +47,11 @@ export class BowlingGame {
     const remaining = this.remainingPins()
     if (pinsKnocked > remaining) throw new Error(`Invalid roll, remaining pins are ${remaining}`)
 
-    if (pinsKnocked === remaining) {
-      // Strike
-      if (this.rolls.length === 0) { this.doubleRoll = 2 }
-      // Spare
-      if (this.rolls.length === 1) { this.doubleRoll = 1 }
-    }
-
     this.rolls.push(pinsKnocked)
-    console.log('remainingRolls', this.remainingRolls())
     if (this.remainingRolls() === 0) this.nextFrame()
     if (this.frame > MATCH_FRAMES) this.gameOver = true
 
+    // reads doubleRoll here
     let partialScore
     if (this.doubleRoll > 0) {
       partialScore = pinsKnocked * 2
@@ -68,12 +61,18 @@ export class BowlingGame {
     }
     this.partialScore.push(partialScore)
 
+    // writes doubleRoll - order is important
+    if (pinsKnocked === remaining) {
+      // Strike
+      if (this.rolls.length === 0) { this.doubleRoll = 2 }
+      // Spare
+      if (this.rolls.length === 1) { this.doubleRoll = 1 }
+    }
+
     this.score += partialScore
   }
 
-  getScore (): number {
-    return sumArray(this.partialScore)
-  }
+  getScore (): number { return this.score }
 
   getStatus (): BowlingGameStatus {
     const { matchLength, rolls, partialScore, score, frame } = this
