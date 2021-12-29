@@ -30,3 +30,21 @@ describe('Step2', () => {
     expect(newScore).to.equal(20)
   })
 })
+
+describe('Step3', () => {
+  it('should correctly handle strike(s)', () => {
+    const game = new BowlingGame()
+    game.roll(10)
+
+    const score01 = game.getScore()
+    expect(score01).to.equal(10)
+
+    game.roll(5)
+    const score02 = game.getScore()
+    expect(score02).to.equal(20)
+
+    game.roll(3)
+    const score03 = game.getScore()
+    expect(score03).to.equal(26)
+  })
+})
